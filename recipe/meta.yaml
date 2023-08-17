@@ -1,45 +1,46 @@
-{% set version = "0.2" %}
+{% set name = "glue-geospatial" %}
+{% set version = "0.4" %}
 
 package:
-  name: glue-geospatial
-  version: {{version}}
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
-  fn: glue-geospatial-{{version}}.tar.gz
-  url: https://pypi.io/packages/source/g/glue-geospatial/glue-geospatial-{{version}}.tar.gz
-  sha256: d7cdf4ccfdea7fa75ae7acc9d1584a9269f44f08a04bb15f69793c6abe6fa678
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/glue-geospatial-{{ version }}.tar.gz
+  sha256: 5261e805e15095bab1339d56412edfad0d5166e1bb7e56ee4b8ff6acf10fc7d6
 
 build:
-  number: 0
-  script: python -m pip install --no-deps --ignore-installed .
   noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
 
 requirements:
-
-  build:
-    - python
+  host:
+    - python >=3.6
+    - setuptools-scm
     - pip
-
   run:
-    - python
-    - numpy
-    - astropy
-    - pyproj
-    - rasterio
+    - python >=3.6
+    - glue-core >=1.0
+    - rasterio >=1.0
+    - pyproj >=2.3
     - affine
-    - glue-core >=0.13
 
 test:
   imports:
-    - rasterio
     - glue_geospatial
     - glue_geospatial.data_factory
     - glue_geospatial.coordinates
+  commands:
+    - pip check
+  requires:
+    - pip
 
 about:
   home: https://github.com/glue-viz/glue-geospatial
-  license: BSD 3-Clause
-  summary: Geospatial plugin for glue
+  summary: Experimental glue plugin for geospatial imagery
+  license: BSD-3-Clause
+  license_file: LICENSE
 
 extra:
   recipe-maintainers:
